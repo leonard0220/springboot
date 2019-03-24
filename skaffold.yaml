@@ -1,30 +1,9 @@
-apiVersion: skaffold/v1beta2
+apiVersion: skaffold/v1beta7
 kind: Config
 build:
   artifacts:
-  - image: changeme
-    context: .
-    docker: {}
-  tagPolicy:
-    envTemplate:
-      template: '{{.DOCKER_REGISTRY}}/leonard0220/springboot:{{.VERSION}}'
-  local: {}
+  - image: springboot
 deploy:
-  kubectl: {}
-profiles:
-- name: dev
-  build:
-    artifacts:
-    - docker: {}
-    tagPolicy:
-      envTemplate:
-        template: '{{.DOCKER_REGISTRY}}/leonard0220/springboot:{{.DIGEST_HEX}}'
-    local: {}
-  deploy:
-    helm:
-      releases:
-      - name: springboot
-        chartPath: charts/springboot
-        setValueTemplates:
-          image.repository: '{{.DOCKER_REGISTRY}}/leonard0220/springboot'
-          image.tag: '{{.DIGEST_HEX}}'
+  kubectl: 
+    manifests:
+        - k8s-*
